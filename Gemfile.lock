@@ -1,0 +1,27 @@
+PATH
+  remote: .
+  specs:
+    jruby_sandbox (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    rspec (2.4.0)
+      rspec-core (~> 2.4.0)
+      rspec-expectations (~> 2.4.0)
+      rspec-mocks (~> 2.4.0)
+    rspec-core (2.4.0)
+    rspec-expectations (2.4.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.4.0)
+    yard (0.6.4)
+
+PLATFORMS
+  java
+  ruby
+
+DEPENDENCIES
+  jruby_sandbox!
+  rspec
+  yard

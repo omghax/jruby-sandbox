@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="jar" name="sandbox">
+  <property file="build.properties" />
+
+  <property name="src.java" value="src/java" />
+  <property name="src.ruby" value="src/ruby" />
+  <property name="target" value="target" />
+  <property name="target.classes" value="${target}/classes" />
+  <property name="target.classes.test" value="${target}/test-classes" />
+  <property name="lib.dir" value="lib" />
+
+  <path id="build.classpath">
+    <fileset dir="/Users/dray/.rvm/rubies/jruby-1.5.6/lib" includes="*.jar" />
+    <fileset dir="${lib.dir}" includes="*.jar" excludes="sandbox.jar" />
+  </path>
+
+  <target name="init">
+    <mkdir dir="${target}" />
+    <mkdir dir="${target.classes}" />
+  </target>
+
+  <target name="clean">
+    <delete dir="target" />
+  </target>
+
+  <target depends="init" name="build" description="Compiles Java source files">
+    <javac debug="true" destdir="${target.classes}" source="${version.source}" target="${version.target}">
+      <compilerarg value="-Xlint:deprecation" />
+      <compilerarg value="-Xlint:unchecked" />
+      <classpath refid="build.classpath"/>
+      <src path="${src.java}"/>
+    </javac>
+  </target>
+
+  <target depends="build" name="jar" description="Build a JAR file with the generated Java class files">
+    <jar destfile="${lib.dir}/sandbox.jar" basedir="${target.classes}" />
+    <copy todir="${lib.dir}">
+      <fileset dir="${src.ruby}" includes="**/*.rb" />
+    </copy>
+  </target>
+</project>

@@ -1,5 +1,3 @@
-package org.jruby.ext.sandbox;
-
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;

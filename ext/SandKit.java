@@ -1,3 +1,8 @@
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintStream;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -28,28 +33,26 @@ import org.jruby.common.IRubyWarnings;
 
 import org.jruby.exceptions.RaiseException;
 
-@JRubyClass(name="SandKit")
+@JRubyClass(name="Sandbox::Kit")
 public class SandKit extends RubyObject {
-  private final static ObjectAllocator SANDBOX_ALLOCATOR = new ObjectAllocator() {
+  private final static ObjectAllocator KIT_ALLOCATOR = new ObjectAllocator() {
     public IRubyObject allocate(Ruby runtime, RubyClass klass) {
       return new SandKit(runtime, klass);
     }
   };
 
   public static void initialize(Ruby runtime) {
-    rb_cSandbox = runtime.getClass("Sandbox");
+    rb_mSandbox = runtime.defineModule("Sandbox");
 
-    rb_cSandKit = runtime.defineClass("SandKit", runtime.getObject(), SANDBOX_ALLOCATOR);
-    rb_cSandKit.defineAnnotatedMethods(SandKit.class);
+    rb_cSandboxKit = rb_mSandbox.defineClassUnder("Kit", runtime.getObject(), KIT_ALLOCATOR);
+    rb_cSandboxKit.defineAnnotatedMethods(SandKit.class);
 
-    rb_eStandardError = runtime.getStandardError();
-    rb_eSandboxException = rb_cSandKit.defineClassUnder("SandboxException", rb_eStandardError, rb_eStandardError.getAllocator());
+    rb_eSandboxException = rb_mSandbox.defineClassUnder("SandboxException", runtime.getStandardError(), runtime.getStandardError().getAllocator());
   }
 
   // TODO remove these
-  private static RubyClass rb_cSandbox;
-  private static RubyClass rb_cSandKit;
-  private static RubyClass rb_eStandardError;
+  private static RubyModule rb_mSandbox;
+  private static RubyClass rb_cSandboxKit;
   private static RubyClass rb_eSandboxException;
 
   private Ruby runtime;
@@ -58,18 +61,26 @@ public class SandKit extends RubyObject {
   public SandKit(Ruby runtime, RubyClass klass) {
     super(runtime, klass);
     this.runtime = runtime;
+    reset();
+  }
+
+  @JRubyMethod
+  public IRubyObject reset() {
     this.wrapped = initWrapped();
+    return this;
   }
 
   private Ruby initWrapped() {
     RubyInstanceConfig cfg = new RubyInstanceConfig();
-    cfg.setInput(runtime.getInstanceConfig().getInput());
-    cfg.setOutput(runtime.getInstanceConfig().getOutput());
-    cfg.setError(runtime.getInstanceConfig().getError());
     cfg.setObjectSpaceEnabled(runtime.getInstanceConfig().isObjectSpaceEnabled());
-    Ruby wrapped = Ruby.newInstance(cfg);
-    wrapped.getLoadService().load(rb_cSandbox.getConstant("PRELUDE").asJavaString(), true);
-    return wrapped;
+    cfg.setInput(runtime.getInstanceConfig().getInput()); // TODO stub out $stdin
+
+    OutputStream stdout = new ByteArrayOutputStream();
+    cfg.setOutput(new PrintStream(stdout));
+    OutputStream stderr = new ByteArrayOutputStream();
+    cfg.setError(new PrintStream(stderr));
+
+    return Ruby.newInstance(cfg);
   }
 
   @JRubyMethod(required=2)
@@ -145,6 +156,13 @@ public class SandKit extends RubyObject {
     } else {
       return boxed; // TODO
     }
+  }
+
+  @JRubyMethod(required=1)
+  public IRubyObject load(IRubyObject str) {
+    // Not sure what the wrap argument does, using true for now
+    wrapped.getLoadService().load(str.asJavaString(), true);
+    return runtime.getTrue();
   }
 
   @JRubyMethod(required=1)

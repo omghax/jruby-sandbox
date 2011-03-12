@@ -13,12 +13,12 @@ begin
 
   task :jar => :compile do
     ant.jar :basedir => 'pkg/classes',
-            :destfile => 'lib/sandbox.jar',
+            :destfile => 'lib/sand_kit.jar',
             :includes => '*.class'
   end
 rescue LoadError
   task :jar do
-    puts "Run `jar` with JRuby >= 1.5 to re-compile the java jar booster"
+    puts "Run `jar` with JRuby >= 1.5 to re-compile"
   end
 end
 

@@ -12,7 +12,7 @@ describe Sandbox do
     it "does not allow execution of system calls" do
       expect {
         sandbox.eval('`ls`')
-      }.to raise_error(Sandbox::SandboxException, "NoMethodError: undefined method ``' for main:Object")
+      }.to raise_error(SandKit::SandboxException, "NoMethodError: undefined method ``' for main:Object")
     end
   end
 

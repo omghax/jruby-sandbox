@@ -128,7 +128,7 @@ public class SandKit extends RubyObject {
   @JRubyMethod(required=1)
   public IRubyObject eval(IRubyObject str) {
     try {
-      return unbox(wrapped.evalScriptlet(str.asJavaString()));
+      return wrapped.evalScriptlet(str.asJavaString());
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();
@@ -137,15 +137,6 @@ public class SandKit extends RubyObject {
       e.printStackTrace();
       runtime.getWarnings().warn(IRubyWarnings.ID.MISCELLANEOUS, "NativeException: " + e);
       return runtime.getNil();
-    }
-  }
-
-  private IRubyObject unbox(IRubyObject boxed) {
-    if (boxed.isImmediate()) {
-      String dumped = wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", boxed).asJavaString();
-      return runtime.getModule("Marshal").callMethod(runtime.getCurrentContext(), "load", runtime.newString(dumped));
-    } else {
-      return boxed; // TODO
     }
   }
 

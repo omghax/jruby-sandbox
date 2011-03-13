@@ -7,7 +7,7 @@ describe Sandbox::Interpreter do
   describe "#eval" do
     it "can define constants" do
       sandbox.eval('Foo = 1')
-      sandbox.eval('Foo').should == 1
+      1.should == sandbox.eval('Foo')
     end
 
     # it "does not allow execution of system calls" do

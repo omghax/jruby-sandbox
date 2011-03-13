@@ -1,8 +1,3 @@
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
-
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -73,13 +68,9 @@ public class SandKit extends RubyObject {
   private Ruby initWrapped() {
     RubyInstanceConfig cfg = new RubyInstanceConfig();
     cfg.setObjectSpaceEnabled(runtime.getInstanceConfig().isObjectSpaceEnabled());
-    cfg.setInput(runtime.getInstanceConfig().getInput()); // TODO stub out $stdin
-
-    OutputStream stdout = new ByteArrayOutputStream();
-    cfg.setOutput(new PrintStream(stdout));
-    OutputStream stderr = new ByteArrayOutputStream();
-    cfg.setError(new PrintStream(stderr));
-
+    cfg.setInput(runtime.getInstanceConfig().getInput());
+    cfg.setOutput(runtime.getInstanceConfig().getOutput());
+    cfg.setError(runtime.getInstanceConfig().getError());
     return Ruby.newInstance(cfg);
   }
 

@@ -1,7 +1,10 @@
+require 'forwardable'
 require 'sand_kit'
 
 module Sandbox
   class Interpreter
+    extend Forwardable
+
     PRELUDE = File.expand_path('../sandbox/prelude.rb', __FILE__).freeze # :nodoc:
 
     def initialize
@@ -10,33 +13,13 @@ module Sandbox
       # setup_kit
     end
 
-    def eval(str)
-      @kit.eval(str)
-    end
-
-    def keep_methods(name, methods)
-      @kit.keep_methods(name, methods)
-    end
-
-    def keep_singleton_methods(name, methods)
-      @kit.keep_singleton_methods(name, methods)
-    end
-
-    def load(str)
-      @kit.load(str)
-    end
-
-    def require(str)
-      @kit.require(str)
-    end
-
-    def remove_method(name, method_name)
-      @kit.remove_method(name, method_name)
-    end
-
-    def remove_singleton_method(name, method_name)
-      @kit.remove_singleton_method(name, method_name)
-    end
+    def_delegator :@kit, :eval
+    def_delegator :@kit, :keep_methods
+    def_delegator :@kit, :keep_singleton_methods
+    def_delegator :@kit, :load
+    def_delegator :@kit, :remove_method
+    def_delegator :@kit, :remove_singleton_method
+    def_delegator :@kit, :require
 
   private
 

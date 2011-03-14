@@ -50,21 +50,19 @@ public class SandKit extends RubyObject {
   private static RubyClass rb_cSandboxKit;
   private static RubyClass rb_eSandboxException;
 
-  private Ruby runtime;
   private Ruby wrapped;
 
   private IRubyObject lastResult;
 
   public SandKit(Ruby runtime, RubyClass klass) {
     super(runtime, klass);
-    this.runtime = runtime;
     reset();
   }
 
   @JRubyMethod
   public IRubyObject reset() {
-    this.wrapped = initWrapped();
-    this.lastResult = wrapped.getNil();
+    wrapped = initWrapped();
+    lastResult = wrapped.getNil();
     return this;
   }
 
@@ -75,10 +73,10 @@ public class SandKit extends RubyObject {
 
   private Ruby initWrapped() {
     RubyInstanceConfig cfg = new RubyInstanceConfig();
-    cfg.setObjectSpaceEnabled(runtime.getInstanceConfig().isObjectSpaceEnabled());
-    cfg.setInput(runtime.getInstanceConfig().getInput());
-    cfg.setOutput(runtime.getInstanceConfig().getOutput());
-    cfg.setError(runtime.getInstanceConfig().getError());
+    cfg.setObjectSpaceEnabled(getRuntime().getInstanceConfig().isObjectSpaceEnabled());
+    cfg.setInput(getRuntime().getInstanceConfig().getInput());
+    cfg.setOutput(getRuntime().getInstanceConfig().getOutput());
+    cfg.setError(getRuntime().getInstanceConfig().getError());
     return Ruby.newInstance(cfg);
   }
 
@@ -117,7 +115,7 @@ public class SandKit extends RubyObject {
     if (module != null) {
       removeMethod(module, method_name.asJavaString());
     }
-    return runtime.getNil();
+    return getRuntime().getNil();
   }
 
   public IRubyObject remove_singleton_method(IRubyObject class_name, IRubyObject method_name) {
@@ -125,12 +123,12 @@ public class SandKit extends RubyObject {
     if (module != null) {
       removeMethod(module, method_name.asJavaString());
     }
-    return runtime.getNil();
+    return getRuntime().getNil();
   }
 
   private void removeMethod(RubyModule module, String methodName) {
     // System.err.println("removing method " + methodName + " from " + module.inspect().asJavaString());
-    module.removeMethod(runtime.getCurrentContext(), methodName);
+    module.removeMethod(getRuntime().getCurrentContext(), methodName);
   }
 
   @JRubyMethod(required=1)
@@ -140,11 +138,11 @@ public class SandKit extends RubyObject {
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();
-      throw new RaiseException(runtime, rb_eSandboxException, path + ": " + msg, false);
+      throw new RaiseException(getRuntime(), rb_eSandboxException, path + ": " + msg, false);
     } catch(Exception e) {
       e.printStackTrace();
-      runtime.getWarnings().warn(IRubyWarnings.ID.MISCELLANEOUS, "NativeException: " + e);
-      return runtime.getNil();
+      getRuntime().getWarnings().warn(IRubyWarnings.ID.MISCELLANEOUS, "NativeException: " + e);
+      return getRuntime().getNil();
     }
   }
 
@@ -152,7 +150,7 @@ public class SandKit extends RubyObject {
   public IRubyObject load(IRubyObject str) {
     // Not sure what the wrap argument does, using true for now
     wrapped.getLoadService().load(str.asJavaString(), true);
-    return lastResult = runtime.getTrue();
+    return lastResult = getRuntime().getTrue();
   }
 
   @JRubyMethod(required=1)
@@ -161,7 +159,7 @@ public class SandKit extends RubyObject {
       return lastResult = RubyKernel.require(wrapped.getKernel(), wrapped.newString(str.asJavaString()), Block.NULL_BLOCK);
     } catch(RaiseException e) {
       e.printStackTrace();
-      return runtime.getFalse();
+      return getRuntime().getFalse();
     }
   }
 }

@@ -53,6 +53,8 @@ public class SandKit extends RubyObject {
   private Ruby runtime;
   private Ruby wrapped;
 
+  private IRubyObject lastResult;
+
   public SandKit(Ruby runtime, RubyClass klass) {
     super(runtime, klass);
     this.runtime = runtime;
@@ -61,8 +63,14 @@ public class SandKit extends RubyObject {
 
   @JRubyMethod
   public IRubyObject reset() {
-    this.wrapped = initWrapped();
+    wrapped = initWrapped();
+    lastResult = wrapped.getNil();
     return this;
+  }
+
+  @JRubyMethod(name="last_result")
+  public IRubyObject getLastResult() {
+    return lastResult;
   }
 
   private Ruby initWrapped() {
@@ -128,7 +136,7 @@ public class SandKit extends RubyObject {
   @JRubyMethod(required=1)
   public IRubyObject eval(IRubyObject str) {
     try {
-      return wrapped.evalScriptlet(str.asJavaString());
+      return lastResult = wrapped.evalScriptlet(str.asJavaString());
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();
@@ -144,13 +152,13 @@ public class SandKit extends RubyObject {
   public IRubyObject load(IRubyObject str) {
     // Not sure what the wrap argument does, using true for now
     wrapped.getLoadService().load(str.asJavaString(), true);
-    return runtime.getTrue();
+    return lastResult = runtime.getTrue();
   }
 
   @JRubyMethod(required=1)
   public IRubyObject require(IRubyObject str) {
     try {
-      return RubyKernel.require(wrapped.getKernel(), wrapped.newString(str.asJavaString()), Block.NULL_BLOCK);
+      return lastResult = RubyKernel.require(wrapped.getKernel(), wrapped.newString(str.asJavaString()), Block.NULL_BLOCK);
     } catch(RaiseException e) {
       e.printStackTrace();
       return runtime.getFalse();

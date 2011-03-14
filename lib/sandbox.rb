@@ -16,6 +16,7 @@ module Sandbox
     def_delegator :@kit, :eval
     def_delegator :@kit, :keep_methods
     def_delegator :@kit, :keep_singleton_methods
+    def_delegator :@kit, :last_result
     def_delegator :@kit, :load
     def_delegator :@kit, :remove_method
     def_delegator :@kit, :remove_singleton_method

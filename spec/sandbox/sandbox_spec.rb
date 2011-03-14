@@ -24,4 +24,11 @@ describe Sandbox::Interpreter do
       }.from(false)
     end
   end
+
+  describe "#last_result" do
+    it "returns the result of the last expression executed" do
+      sandbox.eval('foo = 1 + 2')
+      3.should == sandbox.last_result
+    end
+  end
 end

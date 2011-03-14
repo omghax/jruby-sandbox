@@ -38,10 +38,10 @@ public class SandKit extends RubyObject {
   };
 
   public static void initialize(Ruby runtime) {
-    RubyModule rb_mSandbox = runtime.defineModule("Sandbox");
-    RubyClass rb_cSandboxKit = rb_mSandbox.defineClassUnder("Kit", runtime.getObject(), KIT_ALLOCATOR);
+    RubyClass rb_cSandbox = runtime.defineClass("Sandbox", runtime.getObject(), runtime.getObject().getAllocator());
+    RubyClass rb_cSandboxKit = rb_cSandbox.defineClassUnder("Kit", runtime.getObject(), KIT_ALLOCATOR);
     rb_cSandboxKit.defineAnnotatedMethods(SandKit.class);
-    rb_mSandbox.defineClassUnder("SandboxException", runtime.getStandardError(), runtime.getStandardError().getAllocator());
+    rb_cSandbox.defineClassUnder("SandboxException", runtime.getStandardError(), runtime.getStandardError().getAllocator());
   }
 
   private Ruby wrapped;

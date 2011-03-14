@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'stringio'
 
-describe Sandbox::Interpreter do
-  let(:sandbox) { Sandbox::Interpreter.new }
+describe Sandbox do
+  let(:sandbox) { Sandbox.new }
 
   describe "#eval" do
     it "can define constants" do

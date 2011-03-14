@@ -9,7 +9,7 @@ module Sandbox
 
     def initialize
       @kit = Kit.new
-      @kit.load(PRELUDE)
+      reset
       # setup_kit
     end
 
@@ -24,6 +24,7 @@ module Sandbox
 
     def reset
       @kit.initialize
+      @kit.load(PRELUDE)
     end
 
   private

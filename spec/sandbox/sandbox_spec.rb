@@ -16,6 +16,12 @@ describe Sandbox::Interpreter do
     #   }.to raise_error(Sandbox::SandboxException, "NoMethodError: undefined method ``' for main:Object")
     # end
 
+    it "wraps exceptions from the sandbox" do
+      expect {
+        sandbox.eval("raise 'KABOOM'")
+      }.to raise_error(Sandbox::SandboxException, 'RuntimeError: KABOOM')
+    end
+
     it "does not leak references from required libraries" do
       expect {
         sandbox.eval("require 'digest/md5'")

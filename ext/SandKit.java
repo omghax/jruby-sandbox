@@ -38,21 +38,13 @@ public class SandKit extends RubyObject {
   };
 
   public static void initialize(Ruby runtime) {
-    rb_mSandbox = runtime.defineModule("Sandbox");
-
-    rb_cSandboxKit = rb_mSandbox.defineClassUnder("Kit", runtime.getObject(), KIT_ALLOCATOR);
+    RubyModule rb_mSandbox = runtime.defineModule("Sandbox");
+    RubyClass rb_cSandboxKit = rb_mSandbox.defineClassUnder("Kit", runtime.getObject(), KIT_ALLOCATOR);
     rb_cSandboxKit.defineAnnotatedMethods(SandKit.class);
-
-    rb_eSandboxException = rb_mSandbox.defineClassUnder("SandboxException", runtime.getStandardError(), runtime.getStandardError().getAllocator());
+    rb_mSandbox.defineClassUnder("SandboxException", runtime.getStandardError(), runtime.getStandardError().getAllocator());
   }
 
-  // TODO remove these
-  private static RubyModule rb_mSandbox;
-  private static RubyClass rb_cSandboxKit;
-  private static RubyClass rb_eSandboxException;
-
   private Ruby wrapped;
-
   private IRubyObject lastResult;
 
   public SandKit(Ruby runtime, RubyClass klass) {
@@ -138,6 +130,7 @@ public class SandKit extends RubyObject {
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();
+      RubyClass rb_eSandboxException = (RubyClass)getRuntime().getClassFromPath("Sandbox::SandboxException");
       throw new RaiseException(getRuntime(), rb_eSandboxException, path + ": " + msg, false);
     } catch(Exception e) {
       e.printStackTrace();

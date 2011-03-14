@@ -23,6 +23,11 @@ describe Sandbox::Interpreter do
         Object.const_defined?(:Digest)
       }.from(false)
     end
+
+    it "uses a persistent toplevel scope" do
+      sandbox.eval('foo = 1')
+      1.should == sandbox.eval('foo')
+    end
   end
 
   describe "#last_result" do

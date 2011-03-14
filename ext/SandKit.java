@@ -134,7 +134,7 @@ public class SandKit extends RubyObject {
   @JRubyMethod(required=1)
   public IRubyObject eval(IRubyObject str) {
     try {
-      return lastResult = wrapped.evalScriptlet(str.asJavaString());
+      return lastResult = wrapped.evalScriptlet(str.asJavaString(), wrapped.getCurrentContext().getCurrentScope());
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();

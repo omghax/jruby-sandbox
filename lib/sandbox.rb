@@ -22,6 +22,10 @@ module Sandbox
     def_delegator :@kit, :remove_singleton_method
     def_delegator :@kit, :require
 
+    def reset
+      @kit.initialize
+    end
+
   private
 
     def setup_kit

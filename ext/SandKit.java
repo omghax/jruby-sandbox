@@ -23,6 +23,7 @@ import org.jruby.internal.runtime.methods.DynamicMethod;
 import org.jruby.runtime.Block;
 import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.builtin.IRubyObject;
+import static org.jruby.runtime.Visibility.*;
 
 import org.jruby.common.IRubyWarnings;
 
@@ -56,11 +57,10 @@ public class SandKit extends RubyObject {
 
   public SandKit(Ruby runtime, RubyClass klass) {
     super(runtime, klass);
-    reset();
   }
 
-  @JRubyMethod
-  public IRubyObject reset() {
+  @JRubyMethod(visibility=PUBLIC)
+  public IRubyObject initialize() {
     wrapped = initWrapped();
     lastResult = wrapped.getNil();
     return this;

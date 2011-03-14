@@ -63,8 +63,8 @@ public class SandKit extends RubyObject {
 
   @JRubyMethod
   public IRubyObject reset() {
-    wrapped = initWrapped();
-    lastResult = wrapped.getNil();
+    this.wrapped = initWrapped();
+    this.lastResult = wrapped.getNil();
     return this;
   }
 

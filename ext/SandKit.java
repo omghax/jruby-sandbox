@@ -53,8 +53,8 @@ public class SandKit extends RubyObject {
 
   @JRubyMethod(visibility=PUBLIC)
   public IRubyObject initialize() {
-    wrapped = initWrapped();
-    lastResult = wrapped.getNil();
+    this.wrapped = initWrapped();
+    this.lastResult = wrapped.getNil();
     return this;
   }
 
@@ -126,7 +126,7 @@ public class SandKit extends RubyObject {
   @JRubyMethod(required=1)
   public IRubyObject eval(IRubyObject str) {
     try {
-      return lastResult = wrapped.evalScriptlet(str.asJavaString(), wrapped.getCurrentContext().getCurrentScope());
+      return this.lastResult = wrapped.evalScriptlet(str.asJavaString(), wrapped.getCurrentContext().getCurrentScope());
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();
@@ -143,13 +143,13 @@ public class SandKit extends RubyObject {
   public IRubyObject load(IRubyObject str) {
     // Not sure what the wrap argument does, using true for now
     wrapped.getLoadService().load(str.asJavaString(), true);
-    return lastResult = getRuntime().getTrue();
+    return this.lastResult = getRuntime().getTrue();
   }
 
   @JRubyMethod(required=1)
   public IRubyObject require(IRubyObject str) {
     try {
-      return lastResult = RubyKernel.require(wrapped.getKernel(), wrapped.newString(str.asJavaString()), Block.NULL_BLOCK);
+      return this.lastResult = RubyKernel.require(wrapped.getKernel(), wrapped.newString(str.asJavaString()), Block.NULL_BLOCK);
     } catch(RaiseException e) {
       e.printStackTrace();
       return getRuntime().getFalse();

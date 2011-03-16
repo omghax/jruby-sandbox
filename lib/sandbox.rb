@@ -10,7 +10,6 @@ class Sandbox
   def initialize
     @kit = Kit.new
     reset
-    # setup_kit
   end
 
   def_delegator :@kit, :eval
@@ -24,6 +23,7 @@ class Sandbox
 
   def reset
     @kit.initialize
+    # setup_kit
     @kit.load(PRELUDE)
   end
 

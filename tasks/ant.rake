@@ -18,7 +18,7 @@ begin
   end
 rescue LoadError
   task :jar do
-    puts "Run `jar` with JRuby >= 1.5 to re-compile"
+    puts "Run `rake jar` with JRuby >= 1.5 to re-compile"
   end
 end
 

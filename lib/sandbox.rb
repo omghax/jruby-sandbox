@@ -135,7 +135,6 @@ private
     public_methods
     raise
     remove_instance_variable
-    require
     respond_to?
     scan
     send

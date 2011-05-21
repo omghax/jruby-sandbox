@@ -22,10 +22,9 @@ describe Sandbox do
       }.to raise_error(Sandbox::SandboxException, 'RuntimeError: KABOOM')
     end
 
-    # TODO: allowing Kernel#require is likely a security risk.
     it "does not leak references from required libraries" do
       expect {
-        sandbox.eval("require 'digest/md5'")
+        sandbox.require('digest/md5')
       }.to_not change {
         Object.const_defined?(:Digest)
       }.from(false)

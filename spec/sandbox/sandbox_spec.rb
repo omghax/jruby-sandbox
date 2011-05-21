@@ -10,11 +10,11 @@ describe Sandbox do
       1.should == sandbox.eval('Foo')
     end
 
-    # it "does not allow execution of system calls" do
-    #   expect {
-    #     sandbox.eval('`ls`')
-    #   }.to raise_error(Sandbox::SandboxException, "NoMethodError: undefined method ``' for main:Object")
-    # end
+    it "does not allow execution of system calls" do
+      expect {
+        sandbox.eval('`ls`')
+      }.to raise_error(Sandbox::SandboxException, "NoMethodError: undefined method ``' for main:Object")
+    end
 
     it "wraps exceptions from the sandbox" do
       expect {
@@ -22,6 +22,7 @@ describe Sandbox do
       }.to raise_error(Sandbox::SandboxException, 'RuntimeError: KABOOM')
     end
 
+    # TODO: allowing Kernel#require is likely a security risk.
     it "does not leak references from required libraries" do
       expect {
         sandbox.eval("require 'digest/md5'")

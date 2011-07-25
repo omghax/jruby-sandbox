@@ -15,7 +15,7 @@ Install JRuby 1.6.1 through RVM first:
 The .rvmrc file will create a "jruby_sandbox" gemset and will use
 bundler to install the dependencies. To build the JRuby extension, run
 
-    rake compile
+    rake jar
 
 This will build a lib/sand_kit.jar file. Once that's done you can load
 the library in an irb session like so:

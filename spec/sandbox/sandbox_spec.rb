@@ -42,4 +42,14 @@ describe Sandbox do
       3.should == sandbox.last_result
     end
   end
+  
+  describe "returned objects" do
+    it "should not raise an error when calling respond_to? with a method they don't respond_to" do
+      str = sandbox.eval(%{"Eric"})
+      
+      expect {
+        str.respond_to?(:somethingstringsdonthave)
+      }.to_not raise_error(NoMethodError)
+    end
+  end
 end

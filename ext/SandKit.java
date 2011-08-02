@@ -14,6 +14,7 @@ import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyKernel;
 import org.jruby.RubyModule;
 import org.jruby.RubyObject;
+import org.jruby.CompatVersion;
 
 import org.jruby.anno.JRubyClass;
 import org.jruby.anno.JRubyMethod;
@@ -69,6 +70,7 @@ public class SandKit extends RubyObject {
     cfg.setInput(getRuntime().getInstanceConfig().getInput());
     cfg.setOutput(getRuntime().getInstanceConfig().getOutput());
     cfg.setError(getRuntime().getInstanceConfig().getError());
+    cfg.setCompatVersion(CompatVersion.RUBY1_9);
     return Ruby.newInstance(cfg);
   }
 

@@ -4,12 +4,12 @@
 # development environment upon cd'ing into the directory
 
 # First we specify our desired <ruby>[@<gemset>], the @gemset name is optional.
-environment_id="jruby-1.6.1@jruby_sandbox"
+environment_id="jruby@jruby_sandbox"
 
 #
 # Uncomment following line if you want options to be set only for given project.
 #
-# PROJECT_JRUBY_OPTS=( --1.9 )
+PROJECT_JRUBY_OPTS=( --1.9 )
 
 #
 # First we attempt to load the desired environment directly from the environment

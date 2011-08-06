@@ -119,6 +119,7 @@ private
     instance_variables
     instance_variable_get
     instance_variable_set
+    instance_variable_defined?
     Integer
     is_a?
     iterator?
@@ -136,6 +137,7 @@ private
     raise
     remove_instance_variable
     respond_to?
+    respond_to_missing?
     scan
     send
     singleton_methods

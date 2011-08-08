@@ -7,7 +7,7 @@ describe Sandbox do
   describe "#eval" do
     it "can define constants" do
       sandbox.eval('Foo = 1')
-      1.should == sandbox.eval('Foo')
+      sandbox.eval('Foo').should == 1
     end
 
     it "does not allow execution of system calls" do
@@ -32,21 +32,21 @@ describe Sandbox do
 
     it "uses a persistent toplevel scope" do
       sandbox.eval('foo = 1')
-      1.should == sandbox.eval('foo')
+      sandbox.eval('foo').should == 1
     end
   end
 
   describe "#last_result" do
     it "returns the result of the last expression executed" do
       sandbox.eval('foo = 1 + 2')
-      3.should == sandbox.last_result
+      sandbox.last_result.should == 3
     end
   end
-  
+
   describe "returned objects" do
     it "should not raise an error when calling respond_to? with a method they don't respond_to" do
       str = sandbox.eval(%{"Eric"})
-      
+
       expect {
         str.respond_to?(:somethingstringsdonthave)
       }.to_not raise_error(NoMethodError)

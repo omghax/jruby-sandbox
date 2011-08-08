@@ -45,11 +45,13 @@ public class SandKit extends RubyObject {
     rb_cSandbox.defineClassUnder("SandboxException", runtime.getStandardError(), runtime.getStandardError().getAllocator());
   }
 
+  private Ruby runtime;
   private Ruby wrapped;
   private IRubyObject lastResult;
 
   public SandKit(Ruby runtime, RubyClass klass) {
     super(runtime, klass);
+    this.runtime = runtime;
   }
 
   @JRubyMethod(visibility=PUBLIC)
@@ -128,7 +130,9 @@ public class SandKit extends RubyObject {
   @JRubyMethod(required=1)
   public IRubyObject eval(IRubyObject str) {
     try {
-      return this.lastResult = wrapped.evalScriptlet(str.asJavaString(), wrapped.getCurrentContext().getCurrentScope());
+      this.lastResult = wrapped.evalScriptlet(str.asJavaString(), wrapped.getCurrentContext().getCurrentScope());
+      this.lastResult = unbox(this.lastResult);
+      return this.lastResult;
     } catch(RaiseException e) {
       String msg = e.getException().callMethod(wrapped.getCurrentContext(), "message").asJavaString();
       String path = e.getException().type().getName();
@@ -138,6 +142,18 @@ public class SandKit extends RubyObject {
       e.printStackTrace();
       getRuntime().getWarnings().warn(IRubyWarnings.ID.MISCELLANEOUS, "NativeException: " + e);
       return getRuntime().getNil();
+    }
+  }
+
+  private IRubyObject unbox(IRubyObject obj) {
+    if (obj.isImmediate()) {
+      // Copy the object created in the sandbox to the outside by marshalling
+      // and unmarshalling it.
+      String dumped = wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj).toString();
+      return runtime.getModule("Marshal").callMethod(runtime.getCurrentContext(), "load", runtime.newString(dumped));
+    } else {
+      // TODO: Return a Sandbox::Ref object.
+      return obj;
     }
   }
 

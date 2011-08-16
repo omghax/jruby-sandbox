@@ -1,5 +1,4 @@
 *.gem
-*.jar
 .bundle
 pkg/*
 tags

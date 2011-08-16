@@ -5,12 +5,12 @@ require 'sandbox/version'
 Gem::Specification.new do |s|
   s.name        = 'jruby_sandbox'
   s.version     = Sandbox::VERSION
-  s.platform    = Gem::Platform::RUBY
+  s.platform    = 'java'
   s.authors     = ['Dray Lacy']
   s.email       = ['dray@envylabs.com']
   s.homepage    = 'http://github.com/omghax/jruby_sandbox'
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = 'Sandbox support for JRuby'
+  s.description = "A version of _why's Freaky Freaky Sandbox for JRuby."
 
   s.rubyforge_project = 'jruby_sandbox'
 
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake-compiler'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'yard'
 end

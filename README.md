@@ -14,7 +14,7 @@ This gem requires JRuby 1.6. You can install it with RVM:
 ## Building
 
 To build the JRuby extension, run `rake compile`. This will build the
-lib/sandbox/sandbox.jar file, which lib/sandbox.rb loads.
+`lib/sandbox/sandbox.jar` file, which `lib/sandbox.rb` loads.
 
 ## Basic Usage
 
@@ -32,17 +32,18 @@ code without polluting the host environment.
     >> x
     NameError: undefined local variable or method `x' for #<Object:0x11cdc190>
 
-There's also Sandbox::Full#require, which lets you invoke Kernel#require
-directly for the sandbox, so you can load any trusted core libraries.
-Note that this is a direct binding to Kernel#require, so it will only
-load ruby stdlib libraries (i.e. no rubygems support yet).
+There's also `Sandbox::Full#require`, which lets you invoke
+`Kernel#require` directly for the sandbox, so you can load any trusted
+core libraries.  Note that this is a direct binding to `Kernel#require`,
+so it will only load ruby stdlib libraries (i.e. no rubygems support
+yet).
 
 ## Known Issues / TODOs
 
-  * Sandbox::Full#import is unfinished.
-  * Sandbox::Safe is currently just an alias for Sandbox::Full. The plan
-    is to make it extend from Sandbox::Full and lock down the
-    environment (using #keep_methods) in its initializer.
+  * `Sandbox::Full#import` is unfinished.
+  * `Sandbox::Safe` is currently just an alias for `Sandbox::Full`. The
+    plan is to make it extend from `Sandbox::Full` and lock down the
+    environment (using `#keep_methods`) in its initializer.
   * It would be a good idea to integrate something like FakeFS to stub
     out the filesystem in the sandbox.
   * There is currently no timeout support, so it's possible for a

@@ -101,7 +101,9 @@ public class SandboxFull extends RubyObject {
         // hierarchy. As a result, we can intercept all new instances that are
         // created and all method_missing calls.
         RubyModule sup = wrapped.getClass("BoxedClass");
-        if (!link) {
+        if (!link && runtimeModule instanceof RubyClass) {
+          // If we're importing a class, recursively import all of its
+          // superclasses as well.
           sup = importClassPath(runtimeModule.getSuperClass().getName(), link);
         }
         RubyClass klass = (RubyClass) sup;

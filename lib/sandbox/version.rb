@@ -1,3 +1,3 @@
-class Sandbox
-  VERSION = '0.0.1'
+module Sandbox
+  VERSION = '0.0.3'
 end

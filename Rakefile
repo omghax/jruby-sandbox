@@ -18,7 +18,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = ['--backtrace']
 end
 
-task :gem => :compile
+# Make sure the jar is up to date before running specs
 task :spec => :compile
 
 task :default => :spec

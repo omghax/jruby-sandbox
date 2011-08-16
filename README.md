@@ -40,5 +40,12 @@ load ruby stdlib libraries (i.e. no rubygems support yet).
 ## Known Issues / TODOs
 
   * Sandbox::Full#import is unfinished.
+  * Sandbox::Safe is currently just an alias for Sandbox::Full. The plan
+    is to make it extend from Sandbox::Full and lock down the
+    environment (using #keep_methods) in its initializer.
+  * It would be a good idea to integrate something like FakeFS to stub
+    out the filesystem in the sandbox.
+  * There is currently no timeout support, so it's possible for a
+    sandbox to loop indefinitely and block the host interpreter.
 
 [1]: http://ola-bini.blogspot.com/2006/12/freaky-freaky-sandbox-has-come-to-jruby.html

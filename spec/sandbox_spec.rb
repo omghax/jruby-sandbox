@@ -88,6 +88,12 @@ describe Sandbox do
         struct.foo = 'baz'
         subject.eval('struct.foo').should == 'baz'
       end
+      
+      it "should be able to pass large string data from the box to the environment" do
+        expect {
+          subject.eval %{'RUBY'*100}
+        }.to_not raise_error(Sandbox::SandboxException)
+      end
     end
   end
 

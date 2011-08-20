@@ -118,6 +118,7 @@ module Sandbox
       method_missing
       nil?
       private_methods
+      print
       proc
       protected_methods
       public_methods

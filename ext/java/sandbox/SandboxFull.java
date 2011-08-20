@@ -293,13 +293,13 @@ public class SandboxFull extends RubyObject {
     }
   }
 
-  protected IRubyObject runMethod(IRubyObject recv, String name, IRubyObject[] args) {
+  protected IRubyObject runMethod(IRubyObject recv, String name, IRubyObject[] args, Block block) {
     IRubyObject[] args2 = new IRubyObject[args.length];
     for (int i = 0; i < args.length; i++) {
       args2[i] = unbox(args[i]);
     }
     IRubyObject recv2 = unbox(recv);
-    IRubyObject result = recv2.callMethod(getRuntime().getCurrentContext(), name, args2);
+    IRubyObject result = recv2.callMethod(getRuntime().getCurrentContext(), name, args2, block);
     return rebox(result);
   }
 }

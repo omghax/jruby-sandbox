@@ -120,5 +120,15 @@ describe Sandbox do
       Foo.instance_eval('def Foo.foo; "baz"; end')
       subject.eval('Foo.foo').should == 'baz'
     end
+    
+    it "should be possible to call a method on the class that receives a block" do
+      Foo = Class.new do
+        def self.bar
+          yield
+        end
+      end
+      subject.ref(Foo)
+      subject.eval(%{Foo.bar { "baz" }}).should == 'baz'
+    end
   end
 end

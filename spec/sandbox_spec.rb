@@ -17,6 +17,16 @@ describe Sandbox do
     subject { Sandbox.safe }
 
     it { should be_an_instance_of(Sandbox::Safe) }
+    
+    it 'should not lock down until calling activate!' do
+      subject.eval('`echo hello`').should == "hello\n"
+      
+      subject.activate!
+      
+      expect {
+        subject.eval('`echo hello`')
+      }.to raise_error(Sandbox::SandboxException)
+    end
   end
 
   describe ".current" do

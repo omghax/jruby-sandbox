@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jruby_sandbox (0.0.3-java)
+    jruby_sandbox (0.0.4-java)
 
 GEM
   remote: http://rubygems.org/

@@ -15,7 +15,6 @@ module Sandbox
   end
 
   class Safe < Full
-    
     def activate!
       keep_singleton_methods(:Kernel, KERNEL_S_METHODS)
       keep_singleton_methods(:Symbol, SYMBOL_S_METHODS)
@@ -294,6 +293,5 @@ module Sandbox
       []
       []=
     ].freeze
-    
   end
 end

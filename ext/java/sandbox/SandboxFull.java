@@ -261,7 +261,7 @@ public class SandboxFull extends RubyObject {
   }
 
   private IRubyObject cross(IRubyObject obj) {
-    IRubyObject dumped = wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj);    
+    IRubyObject dumped = wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj);
     return getRuntime().getModule("Marshal").callMethod(getRuntime().getCurrentContext(), "load", dumped);
   }
 

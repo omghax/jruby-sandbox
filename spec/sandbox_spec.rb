@@ -17,12 +17,12 @@ describe Sandbox do
     subject { Sandbox.safe }
 
     it { should be_an_instance_of(Sandbox::Safe) }
-    
+
     it 'should not lock down until calling activate!' do
       subject.eval('`echo hello`').should == "hello\n"
-      
+
       subject.activate!
-      
+
       expect {
         subject.eval('`echo hello`')
       }.to raise_error(Sandbox::SandboxException)
@@ -88,14 +88,14 @@ describe Sandbox do
         struct.foo = 'baz'
         subject.eval('struct.foo').should == 'baz'
       end
-      
+
       it "should be able to pass large object data from the box to the environment" do
         expect {
           subject.eval %{
             (0..1000).to_a.inject({}) {|h,i| h[i] = "HELLO WORLD"; h }
           }
         }.to_not raise_error(Sandbox::SandboxException)
-        
+
         expect {
           subject.eval %{'RUBY'*100}
         }.to_not raise_error(Sandbox::SandboxException)
@@ -132,7 +132,7 @@ describe Sandbox do
       Foo.instance_eval('def Foo.foo; "baz"; end')
       subject.eval('Foo.foo').should == 'baz'
     end
-    
+
     it "should be possible to call a method on the class that receives a block" do
       Foo = Class.new do
         def self.bar

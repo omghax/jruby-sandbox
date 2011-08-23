@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
+import org.jruby.RubyString;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyKernel;
 import org.jruby.RubyModule;
@@ -17,6 +18,7 @@ import org.jruby.runtime.Block;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.common.IRubyWarnings;
 import org.jruby.exceptions.RaiseException;
+
 
 @JRubyClass(name="Sandbox::Full")
 public class SandboxFull extends RubyObject {
@@ -260,8 +262,8 @@ public class SandboxFull extends RubyObject {
   }
 
   private IRubyObject cross(IRubyObject obj) {
-    String dumped = wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj).toString();
-    return getRuntime().getModule("Marshal").callMethod(getRuntime().getCurrentContext(), "load", getRuntime().newString(dumped));
+    RubyString dumped = (RubyString) wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj);    
+    return getRuntime().getModule("Marshal").callMethod(getRuntime().getCurrentContext(), "load", dumped);
   }
 
   protected static IRubyObject getLinkedObject(IRubyObject arg) {

@@ -1,5 +1,6 @@
 *.gem
 .bundle
+lib/sandbox/sandbox.jar
 pkg/*
 tags
 tmp

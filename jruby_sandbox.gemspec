@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = 'jruby_sandbox'
   s.version     = Sandbox::VERSION
   s.platform    = 'java'
-  s.authors     = ['Dray Lacy']
-  s.email       = ['dray@envylabs.com']
+  s.authors     = ['Dray Lacy', 'Eric Allam']
+  s.email       = ['dray@envylabs.com', 'eric@envylabs.com']
   s.homepage    = 'http://github.com/omghax/jruby_sandbox'
   s.summary     = 'Sandbox support for JRuby'
   s.description = "A version of _why's Freaky Freaky Sandbox for JRuby."

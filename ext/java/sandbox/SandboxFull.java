@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.jruby.Ruby;
 import org.jruby.RubyClass;
-import org.jruby.RubyString;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.RubyKernel;
 import org.jruby.RubyModule;
@@ -262,7 +261,7 @@ public class SandboxFull extends RubyObject {
   }
 
   private IRubyObject cross(IRubyObject obj) {
-    RubyString dumped = (RubyString) wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj);    
+    IRubyObject dumped = wrapped.getModule("Marshal").callMethod(wrapped.getCurrentContext(), "dump", obj);    
     return getRuntime().getModule("Marshal").callMethod(getRuntime().getCurrentContext(), "load", dumped);
   }
 

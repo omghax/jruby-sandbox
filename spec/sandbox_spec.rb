@@ -132,7 +132,20 @@ describe Sandbox do
       Foo.instance_eval('def Foo.foo; "baz"; end')
       subject.eval('Foo.foo').should == 'baz'
     end
-
+    
+    it "should be able to call a referenced namespaced module method" do
+      Foo = Class.new
+      Foo::Bar = Module.new do
+        def baz
+          'baz'
+        end
+        module_function :baz
+      end
+      
+      subject.ref(Foo::Bar)
+      subject.eval('Foo::Bar.baz').should == 'baz'
+    end
+    
     it "should be possible to call a method on the class that receives a block" do
       Foo = Class.new do
         def self.bar

@@ -109,19 +109,9 @@ public class SandboxFull extends RubyObject {
         }
         RubyClass klass = (RubyClass) sup;
         if (wrappedModule == wrapped.getObject()) {
-          if (link) {
-            wrappedModule = wrapped.defineClass(name, klass, klass.getAllocator());
-          } else {
-            if (runtimeModule instanceof RubyClass) {
-              wrappedModule = wrapped.defineClass(name, klass, klass.getAllocator());
-            } else {
-              wrappedModule = wrapped.defineModule(name);
-            }
-          }
-        } else if (runtimeModule instanceof RubyClass) {
-          wrappedModule = wrappedModule.defineClassUnder(name, klass, klass.getAllocator());
+          wrappedModule = wrapped.defineClass(name, klass, klass.getAllocator());
         } else {
-          wrappedModule = wrappedModule.defineModuleUnder(name);
+          wrappedModule = wrappedModule.defineClassUnder(name, klass, klass.getAllocator());
         }
       } else {
         // ...or just resolve it, if it was already known

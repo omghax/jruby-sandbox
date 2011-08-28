@@ -7,9 +7,11 @@ for JRuby 1.6.
 
 ## Prerequisites
 
-This gem requires JRuby 1.6. You can install it with RVM:
+This gem requires JRuby 1.6. As of the time of this writing, it is known to
+work with the latest stable version of JRuby, 1.6.3. You can install it via
+RVM with the following command:
 
-    rvm install jruby-1.6.1
+    rvm install jruby-1.6.3
 
 ## Building
 

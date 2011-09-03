@@ -22,10 +22,33 @@ describe Sandbox do
       subject.eval('`echo hello`').should == "hello\n"
 
       subject.activate!
-
+        
       expect {
         subject.eval('`echo hello`')
       }.to raise_error(Sandbox::SandboxException)
+    end
+    
+    it "should activate FakeFS inside the sandbox (and not allow it to be deactivated)" do
+      subject.eval('File').should == ::File
+      
+      subject.activate!
+      
+      foo = File.join(File.dirname(__FILE__), 'support', 'foo.txt')
+
+      expect {
+        subject.eval(%{File.read('#{foo}')})
+      }.to raise_error(Sandbox::SandboxException, /Errno::ENOENT: No such file or directory/)
+      
+      subject.eval('File').should == FakeFS::File
+      subject.eval('Dir').should == FakeFS::Dir
+      subject.eval('FileUtils').should == FakeFS::FileUtils
+      subject.eval('FileTest').should == FakeFS::FileTest
+      
+      subject.eval(%{FakeFS.deactivate!})
+      
+      expect {
+        subject.eval(%{File.read('#{foo}')})
+      }.to raise_error(Sandbox::SandboxException, /Errno::ENOENT: No such file or directory/)
     end
   end
 

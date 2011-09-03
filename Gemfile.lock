@@ -1,7 +1,14 @@
+GIT
+  remote: git://github.com/nanothief/fakefs.git
+  revision: cb63ff262e1ab9dffdda6d20a1b9c90434e97d58
+  specs:
+    fakefs (0.3.2)
+
 PATH
   remote: .
   specs:
     jruby_sandbox (0.0.4-java)
+      fakefs
 
 GEM
   remote: http://rubygems.org/
@@ -24,6 +31,7 @@ PLATFORMS
   java
 
 DEPENDENCIES
+  fakefs!
   jruby_sandbox!
   rake
   rake-compiler

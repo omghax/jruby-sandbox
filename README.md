@@ -38,12 +38,25 @@ core libraries.  Note that this is a direct binding to `Kernel#require`,
 so it will only load ruby stdlib libraries (i.e. no rubygems support
 yet).
 
+## Sandbox::Safe usage
+
+Sandbox::Safe exposes an `#activate!` method which will lock down the sandbox, removing unsafe methods.  Before calling `#activate!`, Sandbox::Safe is the same as Sandbox::Full.
+
+    >> require 'sandbox'
+    => true 
+    >> sand = Sandbox.safe
+    => #<Sandbox::Safe:0x17072b90> 
+    >> sand.eval %{`echo HELLO`}
+    => "HELLO\n" 
+    >> sand.activate! 
+    >> sand.eval %{`echo HELLO`}
+    Sandbox::SandboxException: NoMethodError: undefined method ``' for main:Object
+
+Sandbox::Safe works by whitelisting methods to keep, and removing the rest.  Checkout sandbox.rb for which methods are kept.
+
 ## Known Issues / TODOs
 
   * `Sandbox::Full#import` is unfinished.
-  * `Sandbox::Safe` is currently just an alias for `Sandbox::Full`. The
-    plan is to make it extend from `Sandbox::Full` and lock down the
-    environment (using `#keep_methods`) in its initializer.
   * It would be a good idea to integrate something like FakeFS to stub
     out the filesystem in the sandbox.
   * There is currently no timeout support, so it's possible for a

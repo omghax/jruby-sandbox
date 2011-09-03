@@ -1,5 +1,6 @@
 require 'sandbox/sandbox'
 require 'sandbox/version'
+require 'fakefs/safe'
 
 module Sandbox
   PRELUDE = File.expand_path('../sandbox/prelude.rb', __FILE__).freeze # :nodoc:
@@ -16,6 +17,8 @@ module Sandbox
 
   class Safe < Full
     def activate!
+      activate_fakefs
+      
       keep_singleton_methods(:Kernel, KERNEL_S_METHODS)
       keep_singleton_methods(:Symbol, SYMBOL_S_METHODS)
       keep_singleton_methods(:String, STRING_S_METHODS)
@@ -27,6 +30,29 @@ module Sandbox
       keep_methods(:FalseClass, FALSECLASS_METHODS)
       keep_methods(:Enumerable, ENUMERABLE_METHODS)
       keep_methods(:String, STRING_METHODS)
+    end
+    
+    def activate_fakefs
+      require 'fileutils'
+      
+      ref(FakeFS)
+      FakeFS.constants.each {|c| ref(FakeFS.const_get(c)) }
+      
+      eval <<-RUBY
+        Object.class_eval do
+          remove_const(:Dir)
+          remove_const(:File)
+          remove_const(:FileTest)
+          remove_const(:FileUtils)
+      
+          const_set(:Dir,       FakeFS::Dir)
+          const_set(:File,      FakeFS::File)
+          const_set(:FileUtils, FakeFS::FileUtils)
+          const_set(:FileTest,  FakeFS::FileTest)
+        end
+      RUBY
+      
+      FakeFS::FileSystem.clear
     end
 
     KERNEL_S_METHODS = %w[
@@ -90,7 +116,7 @@ module Sandbox
       eval
       fail
       Float
-      format"
+      format
       freeze
       frozen?
       global_variables

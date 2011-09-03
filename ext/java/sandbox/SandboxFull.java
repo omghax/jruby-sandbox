@@ -36,6 +36,7 @@ public class SandboxFull extends RubyObject {
     cfg.setOutput(getRuntime().getInstanceConfig().getOutput());
     cfg.setError(getRuntime().getInstanceConfig().getError());
     cfg.setCompatVersion(CompatVersion.RUBY1_9);
+    cfg.setScriptFileName("(sandbox)");
 
     SandboxProfile profile = new SandboxProfile(this);
     cfg.setProfile(profile);

@@ -95,7 +95,6 @@ public class SandboxFull extends RubyObject {
 
     for (String name : path.split("::")) {
       runtimeModule = (RubyModule) runtimeModule.getConstantAt(name);
-
       // Create the module when it did not exist yet...
       if (wrappedModule.const_defined_p(wrapped.getCurrentContext(), wrapped.newString(name)).isFalse()) {
         // The BoxedClass takes the place of Object as top of the inheritance
@@ -105,19 +104,31 @@ public class SandboxFull extends RubyObject {
         if (!link && runtimeModule instanceof RubyClass) {
           // If we're importing a class, recursively import all of its
           // superclasses as well.
-          sup = importClassPath(runtimeModule.getSuperClass().getName(), link);
+          sup = importClassPath(runtimeModule.getSuperClass().getName(), true);
         }
+        
         RubyClass klass = (RubyClass) sup;
         if (wrappedModule == wrapped.getObject()) {
-          wrappedModule = wrapped.defineClass(name, klass, klass.getAllocator());
+          
+          if (link || runtimeModule instanceof RubyClass){ // if this is a ref and not an import
+            wrappedModule = wrapped.defineClass(name, klass, klass.getAllocator());
+          } else {
+            wrappedModule = wrapped.defineModule(name);
+          }
+          
         } else {
-          wrappedModule = wrappedModule.defineClassUnder(name, klass, klass.getAllocator());
+          if (runtimeModule instanceof RubyClass){
+            wrappedModule = wrappedModule.defineClassUnder(name, klass, klass.getAllocator());
+          } else {
+            wrappedModule = wrappedModule.defineModuleUnder(name);
+          }
+          
         }
       } else {
         // ...or just resolve it, if it was already known
         wrappedModule = (RubyModule) wrappedModule.getConstantAt(name);
       }
-
+      
       // Check the consistency of the hierarchy
       if (runtimeModule instanceof RubyClass) {
         if (!link && !runtimeModule.getSuperClass().getName().equals(wrappedModule.getSuperClass().getName())) {
@@ -125,7 +136,7 @@ public class SandboxFull extends RubyObject {
         }
       }
 
-      if (link) {
+      if (link || runtimeModule instanceof RubyClass) {
         linkObject(runtimeModule, wrappedModule);
       } else {
         copyMethods(runtimeModule, wrappedModule);
@@ -136,8 +147,8 @@ public class SandboxFull extends RubyObject {
   }
 
   private void copyMethods(RubyModule from, RubyModule to) {
-    to.getMethods().putAll(from.getMethods());
-    to.getSingletonClass().getMethods().putAll(from.getSingletonClass().getMethods());
+    to.getMethodsForWrite().putAll(from.getMethods());
+    to.getSingletonClass().getMethodsForWrite().putAll(from.getSingletonClass().getMethods());
   }
 
   @JRubyMethod(required=2)

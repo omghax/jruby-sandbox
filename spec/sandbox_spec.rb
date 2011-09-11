@@ -125,6 +125,35 @@ describe Sandbox do
       end
     end
   end
+  
+  describe "#import" do
+    subject { Sandbox.new }
+    
+    it "should be able to call a referenced namespaced module method" do
+      Foo = Class.new
+      Foo::Bar = Module.new do
+        def baz
+          'baz'
+        end
+        module_function :baz
+      end
+
+      subject.import(Foo::Bar)
+      subject.eval('Foo::Bar.baz').should == 'baz'
+    end
+
+    it "should be able to include a module from the environment" do
+      Foo = Module.new do
+        def baz
+          'baz'
+        end
+      end
+
+      subject.import(Foo)
+      subject.eval("class Bar; include Foo; end; nil")
+      subject.eval('Bar.new.baz').should == 'baz'
+    end
+  end
 
   describe "#ref" do
     subject { Sandbox.new }
@@ -154,33 +183,6 @@ describe Sandbox do
       subject.ref(Foo)
       Foo.instance_eval('def Foo.foo; "baz"; end')
       subject.eval('Foo.foo').should == 'baz'
-    end
-
-    it "should be able to call a referenced namespaced module method" do
-      Foo = Class.new
-      Foo::Bar = Module.new do
-        def baz
-          'baz'
-        end
-        module_function :baz
-      end
-
-      subject.ref(Foo::Bar)
-      subject.eval('Foo::Bar.baz').should == 'baz'
-    end
-
-    it "should be able to include a module from the environment" do
-      pending 'insert BoxedObject into the sandbox object hierarchy?' do
-        Foo = Module.new do
-          def baz
-            'baz'
-          end
-        end
-
-        subject.ref(Foo)
-        subject.eval("class Bar\n  include Foo\nend")
-        subject.eval('Bar.new.baz').should == 'baz'
-      end
     end
 
     it "should be possible to call a method on the class that receives a block" do

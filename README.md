@@ -58,7 +58,6 @@ Sandbox::Safe works by whitelisting methods to keep, and removing the rest.  Che
 
 ## Known Issues / TODOs
 
-  * `Sandbox::Full#import` is unfinished.
   * It would be a good idea to integrate something like FakeFS to stub
     out the filesystem in the sandbox.
   * There is currently no timeout support, so it's possible for a

@@ -35,8 +35,17 @@ module Sandbox
     def activate_fakefs
       require 'fileutils'
       
-      ref(FakeFS)
-      FakeFS.constants.each {|c| ref(FakeFS.const_get(c)) }
+      # unfortunately, the authors of FakeFS used `extend self` in FileUtils, instead of `module_function`.
+      # I fixed it for them
+      (FakeFS::FileUtils.methods - Module.methods - Kernel.methods).each do |module_method_name|
+        FakeFS::FileUtils.send(:module_function, module_method_name)
+      end
+      
+      import  FakeFS
+      ref     FakeFS::Dir
+      ref     FakeFS::File
+      ref     FakeFS::FileTest
+      import  FakeFS::FileUtils #import FileUtils because it is a module
       
       eval <<-RUBY
         Object.class_eval do
@@ -297,6 +306,7 @@ module Sandbox
       squeeze!
       strip
       strip!
+      start_with?
       sub
       sub!
       succ

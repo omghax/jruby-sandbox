@@ -49,6 +49,12 @@ describe Sandbox do
       expect {
         subject.eval(%{File.read('#{foo}')})
       }.to raise_error(Sandbox::SandboxException, /Errno::ENOENT: No such file or directory/)
+      
+      subject.eval(%{File.open('/bar.txt', 'w') {|file| file << "bar" }})
+      
+      expect {
+        subject.eval(%{FileUtils.cp('/bar.txt', '/baz.txt')})
+      }.to_not raise_error(Sandbox::SandboxException, /NoMethodError/)
     end
   end
 
@@ -152,6 +158,17 @@ describe Sandbox do
       subject.import(Foo)
       subject.eval("class Bar; include Foo; end; nil")
       subject.eval('Bar.new.baz').should == 'baz'
+    end
+    
+    it "should be able to copy instance methods from a module that uses module_function" do
+      Foo = Module.new do        
+        def baz; 'baz'; end
+        
+        module_function :baz
+      end
+      
+      subject.import Foo
+      subject.eval('Foo.baz').should == 'baz'
     end
   end
 

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = 'java'
   s.authors     = ['Dray Lacy', 'Eric Allam']
   s.email       = ['dray@envylabs.com', 'eric@envylabs.com']
-  s.homepage    = 'http://github.com/omghax/jruby_sandbox'
+  s.homepage    = 'http://github.com/omghax/jruby-sandbox'
   s.summary     = 'Sandbox support for JRuby'
   s.description = "A version of _why's Freaky Freaky Sandbox for JRuby."
 

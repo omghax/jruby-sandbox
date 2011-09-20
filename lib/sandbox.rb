@@ -284,6 +284,7 @@ module Sandbox
       intern
       length
       ljust
+      lines
       lstrip
       lstrip!
       match

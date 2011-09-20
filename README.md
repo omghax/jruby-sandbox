@@ -56,10 +56,24 @@ Sandbox::Safe exposes an `#activate!` method which will lock down the sandbox, r
 
 Sandbox::Safe works by whitelisting methods to keep, and removing the rest.  Checkout sandbox.rb for which methods are kept.
 
+Sandbox::Safe.activate! will also isolate the sandbox environment from the filesystem using FakeFS. 
+
+     >> require 'sandbox'
+     => true 
+     >> s = Sandbox.safe
+     => #<Sandbox::Safe:0x3fdb8a73> 
+     >> s.eval('Dir["/"]')
+     => ["/"] 
+     >> s.eval('Dir["/*"]')
+     => ["/Applications", "/bin", "/cores", "/dev", etc.] 
+     > s.activate!
+     >> s.eval('Dir["/*"]')
+     => [] 
+     > Dir['/*']
+     => ["/Applications", "/bin", "/cores", "/dev", etc.] 
+
 ## Known Issues / TODOs
 
-  * It would be a good idea to integrate something like FakeFS to stub
-    out the filesystem in the sandbox.
   * There is currently no timeout support, so it's possible for a
     sandbox to loop indefinitely and block the host interpreter.
 

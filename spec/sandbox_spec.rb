@@ -56,17 +56,6 @@ describe Sandbox do
         subject.eval(%{FileUtils.cp('/bar.txt', '/baz.txt')})
       }.to_not raise_error(Sandbox::SandboxException, /NoMethodError/)
     end
-
-    it "sandboxes global variables" do
-      subject.eval('$0').should == '(sandbox)'
-      /(.)(.)(.)/.match('abc')
-      subject.eval('$TEST = "TEST"; $TEST').should == 'TEST'
-      subject.eval('/(.)(.)(.)/.match("def"); $2').should == 'e'
-      $2.should == 'b'
-      subject.eval('$TEST').should == 'TEST'
-      subject.eval('$2').should == 'e'
-      /(.)(.)(.)/.match('ghi')
-    end
   end
 
   describe ".current" do

@@ -22,6 +22,7 @@ module Sandbox
       keep_singleton_methods(:Kernel, KERNEL_S_METHODS)
       keep_singleton_methods(:Symbol, SYMBOL_S_METHODS)
       keep_singleton_methods(:String, STRING_S_METHODS)
+      keep_singleton_methods(:IO, IO_S_METHODS)
 
       keep_methods(:Kernel, KERNEL_METHODS)
       keep_methods(:NilClass, NILCLASS_METHODS)
@@ -63,6 +64,12 @@ module Sandbox
       
       FakeFS::FileSystem.clear
     end
+    
+    IO_S_METHODS = %w[
+      new
+      foreach
+      open
+    ]
 
     KERNEL_S_METHODS = %w[
       Array

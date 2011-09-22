@@ -1,5 +1,6 @@
 require 'rspec'
 require 'sandbox'
+require 'timeout'
 
 describe Sandbox do
   after(:each) do
@@ -68,6 +69,38 @@ describe Sandbox do
         sandbox = Sandbox.new
         sandbox.ref(Sandbox)
         sandbox.eval('Sandbox.current').should == sandbox
+      end
+    end
+  end
+  
+  describe "#eval_with_timeout" do
+    subject { Sandbox.safe }
+    
+    context "before it's been activated" do
+      it "should protect against long running code" do
+        long_code = <<-RUBY
+          sleep(5)
+        RUBY
+
+        expect {
+          subject.eval_with_timeout(long_code, 1)
+        }.to raise_error(Sandbox::SandboxException, /Timeout/)
+      end
+    end
+    
+    context "after it's been activated" do
+      before(:each) { subject.activate! }
+      
+      it "should protect against long running code" do
+        long_code = <<-RUBY
+          while true; end
+        RUBY
+
+        expect {
+          Timeout.timeout(3) do
+            subject.eval_with_timeout(long_code, 1)
+          end
+        }.to raise_error(Sandbox::SandboxException, /Timeout/)
       end
     end
   end

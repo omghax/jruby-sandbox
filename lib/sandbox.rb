@@ -1,6 +1,7 @@
 require 'sandbox/sandbox'
 require 'sandbox/version'
 require 'fakefs/safe'
+require 'timeout'
 
 module Sandbox
   PRELUDE = File.expand_path('../sandbox/prelude.rb', __FILE__).freeze # :nodoc:
@@ -63,6 +64,18 @@ module Sandbox
       RUBY
       
       FakeFS::FileSystem.clear
+    end
+    
+    def eval_with_timeout(code, timeout=10)
+      require 'timeout'
+      
+      timeout_code = <<-RUBY
+        Timeout.timeout(#{timeout}) do
+          #{code}
+        end
+      RUBY
+      
+      eval timeout_code
     end
     
     IO_S_METHODS = %w[

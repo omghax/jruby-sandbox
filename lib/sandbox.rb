@@ -1,10 +1,11 @@
 require 'sandbox/sandbox'
 require 'sandbox/version'
 require 'fakefs/safe'
-require 'timeout'
 
 module Sandbox
   PRELUDE = File.expand_path('../sandbox/prelude.rb', __FILE__).freeze # :nodoc:
+  
+  TimeoutError = Class.new(Exception)
 
   class << self
     def new
@@ -49,6 +50,8 @@ module Sandbox
       ref     FakeFS::FileTest
       import  FakeFS::FileUtils #import FileUtils because it is a module
       
+      # this is basically what FakeFS.activate! does, but we want to do it in the sandbox
+      # so we have to live with this:
       eval <<-RUBY
         Object.class_eval do
           remove_const(:Dir)
@@ -66,16 +69,49 @@ module Sandbox
       FakeFS::FileSystem.clear
     end
     
-    def eval_with_timeout(code, timeout=10)
-      require 'timeout'
+    def eval(code, options={})
       
-      timeout_code = <<-RUBY
-        Timeout.timeout(#{timeout}) do
-          #{code}
+      if seconds = options[:timeout]
+        sandbox_timeout(code, seconds) do
+          super code
         end
-      RUBY
+      else
+        super code
+      end
       
-      eval timeout_code
+    end
+    
+    private
+    
+    def sandbox_timeout(name, seconds)
+      val, exc = nil
+      
+      thread = Thread.start(name) do
+        begin
+          val = yield
+        rescue Exception => exc
+        end
+      end
+      
+      thread.join(seconds)
+    
+      if thread.alive?
+        if thread.respond_to? :kill!
+          thread.kill!
+        else
+          thread.kill
+        end
+      
+        timed_out = true
+      end
+    
+      if timed_out
+        raise TimeoutError, "#{self.class} timed out"
+      elsif exc
+        raise exc
+      else
+        val
+      end
     end
     
     IO_S_METHODS = %w[

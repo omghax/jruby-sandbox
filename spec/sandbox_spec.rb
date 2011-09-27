@@ -116,6 +116,12 @@ describe Sandbox do
       OPS
       subject.eval(operations).should == 'foo'
     end
+    
+    it "should have an empty ENV" do
+      pending do
+        subject.eval(%{ENV.to_a}).should be_empty 
+      end
+    end
 
     it "should persist state between evaluations" do
       subject.eval('o = Object.new')

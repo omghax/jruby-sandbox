@@ -13,16 +13,25 @@ RVM with the following command:
 
     rvm install jruby-1.6.3
 
-## Building
+## Install and usage via Rubygems
 
-To build the JRuby extension, run `rake compile`. This will build the
-`lib/sandbox/sandbox.jar` file, which `lib/sandbox.rb` loads.
+    gem install jruby_sandbox
+
+    irb
+
+    >> require 'rubygems'
+    >> gem 'jruby_sandbox'
+    >> require 'sandbox'
+
+    # ... see usage docs below ...
 
 ## Basic Usage
 
 Sandbox gives you a self-contained JRuby interpreter in which to eval
 code without polluting the host environment.
 
+    >> require 'rubygems'
+    >> gem 'jruby_sandbox'
     >> require "sandbox"
     => true
     >> sand = Sandbox::Full.new
@@ -71,6 +80,11 @@ Sandbox::Safe.activate! will also isolate the sandbox environment from the files
      => [] 
      > Dir['/*']
      => ["/Applications", "/bin", "/cores", "/dev", etc.] 
+
+## Building (when using via git clone rather than gem)
+
+To build the JRuby extension, run `rake compile`. This will build the
+`lib/sandbox/sandbox.jar` file, which `lib/sandbox.rb` loads.
 
 ## Known Issues / TODOs
 

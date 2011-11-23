@@ -17,23 +17,14 @@ RVM with the following command:
 
     gem install jruby_sandbox
 
-    irb
-
-    >> require 'rubygems'
-    >> gem 'jruby_sandbox'
-    >> require 'sandbox'
-
-    # ... see usage docs below ...
-
 ## Basic Usage
 
 Sandbox gives you a self-contained JRuby interpreter in which to eval
 code without polluting the host environment.
 
+    $  irb
     >> require 'rubygems'
-    >> gem 'jruby_sandbox'
     >> require "sandbox"
-    => true
     >> sand = Sandbox::Full.new
     => #<Sandbox::Full:0x46377e2a>
     >> sand.eval("x = 1 + 2")
@@ -53,8 +44,9 @@ yet).
 
 Sandbox::Safe exposes an `#activate!` method which will lock down the sandbox, removing unsafe methods.  Before calling `#activate!`, Sandbox::Safe is the same as Sandbox::Full.
 
-    >> require 'sandbox'
-    => true 
+    $  irb
+    >> require 'rubygems'
+    >> require "sandbox"
     >> sand = Sandbox.safe
     => #<Sandbox::Safe:0x17072b90> 
     >> sand.eval %{`echo HELLO`}
@@ -67,8 +59,9 @@ Sandbox::Safe works by whitelisting methods to keep, and removing the rest.  Che
 
 Sandbox::Safe.activate! will also isolate the sandbox environment from the filesystem using FakeFS. 
 
+     $  irb
+     >> require 'rubygems'
      >> require 'sandbox'
-     => true 
      >> s = Sandbox.safe
      => #<Sandbox::Safe:0x3fdb8a73> 
      >> s.eval('Dir["/"]')

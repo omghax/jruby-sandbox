@@ -19,7 +19,7 @@ module Sandbox
   class Safe < Full
     def activate!
       activate_fakefs
-      
+
       keep_singleton_methods(:Kernel, KERNEL_S_METHODS)
       keep_singleton_methods(:Symbol, SYMBOL_S_METHODS)
       keep_singleton_methods(:String, STRING_S_METHODS)
@@ -33,51 +33,51 @@ module Sandbox
       keep_methods(:Enumerable, ENUMERABLE_METHODS)
       keep_methods(:String, STRING_METHODS)
     end
-    
+
     def activate_fakefs
       require 'fileutils'
-      
+
       # unfortunately, the authors of FakeFS used `extend self` in FileUtils, instead of `module_function`.
       # I fixed it for them
       (FakeFS::FileUtils.methods - Module.methods - Kernel.methods).each do |module_method_name|
         FakeFS::FileUtils.send(:module_function, module_method_name)
       end
-      
+
       import  FakeFS
       ref     FakeFS::Dir
       ref     FakeFS::File
       ref     FakeFS::FileTest
       import  FakeFS::FileUtils #import FileUtils because it is a module
-      
+
       eval <<-RUBY
         Object.class_eval do
           remove_const(:Dir)
           remove_const(:File)
           remove_const(:FileTest)
           remove_const(:FileUtils)
-      
+
           const_set(:Dir,       FakeFS::Dir)
           const_set(:File,      FakeFS::File)
           const_set(:FileUtils, FakeFS::FileUtils)
           const_set(:FileTest,  FakeFS::FileTest)
         end
       RUBY
-      
+
       FakeFS::FileSystem.clear
     end
-    
+
     def eval_with_timeout(code, timeout=10)
       require 'timeout'
-      
+
       timeout_code = <<-RUBY
         Timeout.timeout(#{timeout}) do
           #{code}
         end
       RUBY
-      
+
       eval timeout_code
     end
-    
+
     IO_S_METHODS = %w[
       new
       foreach

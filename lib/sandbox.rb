@@ -60,6 +60,17 @@ module Sandbox
           const_set(:File,      FakeFS::File)
           const_set(:FileUtils, FakeFS::FileUtils)
           const_set(:FileTest,  FakeFS::FileTest)
+
+          [Dir, File, FileUtils, FileTest].each do |fake_class|
+            fake_class.class_eval do
+              def self.class_eval 
+                raise NoMethodError, "class_eval is unavailable"
+              end
+              def self.instance_eval 
+                raise NoMethodError, "instance_eval is unavailable"
+              end
+            end
+          end
         end
       RUBY
 

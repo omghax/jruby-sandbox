@@ -55,7 +55,7 @@ describe Sandbox do
       
       expect {
         subject.eval(%{FileUtils.cp('/bar.txt', '/baz.txt')})
-      }.to_not raise_error(Sandbox::SandboxException, /NoMethodError/)
+      }.to_not raise_error(Sandbox::SandboxException, /Sandbox::SandboxException: NoMethodError: /)
     end
   end
 

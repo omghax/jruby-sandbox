@@ -61,24 +61,14 @@ module Sandbox
           const_set(:FileUtils, FakeFS::FileUtils)
           const_set(:FileTest,  FakeFS::FileTest)
 
-          class Dir
-            def self.class_eval(&block)
-              raise NoMethodError, "class_eval is unavailable"
-            end
-          end
-          class File
-            def self.class_eval(&block)
-              raise NoMethodError, "class_eval is unavailable"
-            end
-          end
-          module FileUtils
-            def self.class_eval(&block)
-              raise NoMethodError, "class_eval is unavailable"
-            end
-          end
-          class FileTest
-            def self.class_eval(&block)
-              raise NoMethodError, "class_eval is unavailable"
+          [Dir, File, FileUtils, FileTest].each do |fake_class|
+            fake_class.class_eval do
+              def self.class_eval 
+                raise NoMethodError, "class_eval is unavailable"
+              end
+              def self.instance_eval 
+                raise NoMethodError, "instance_eval is unavailable"
+              end
             end
           end
         end

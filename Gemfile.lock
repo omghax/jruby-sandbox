@@ -1,13 +1,14 @@
 GIT
-  remote: git://github.com/nanothief/fakefs.git
-  revision: cb63ff262e1ab9dffdda6d20a1b9c90434e97d58
+  remote: git://github.com/codeschool/fakefs.git
+  revision: 6ae3212e3dab013b4b5e290d1aceba6466b30dec
+  ref: 6ae3212e3dab013b4b5e290d1aceba6466b30dec
   specs:
-    fakefs (0.3.2)
+    fakefs (0.4.0)
 
 PATH
   remote: .
   specs:
-    jruby_sandbox (0.1.1-java)
+    jruby_sandbox (0.1.2-java)
       fakefs
 
 GEM

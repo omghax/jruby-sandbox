@@ -60,6 +60,27 @@ module Sandbox
           const_set(:File,      FakeFS::File)
           const_set(:FileUtils, FakeFS::FileUtils)
           const_set(:FileTest,  FakeFS::FileTest)
+
+          class Dir
+            def self.class_eval(&block)
+              raise NoMethodError, "class_eval is unavailable"
+            end
+          end
+          class File
+            def self.class_eval(&block)
+              raise NoMethodError, "class_eval is unavailable"
+            end
+          end
+          module FileUtils
+            def self.class_eval(&block)
+              raise NoMethodError, "class_eval is unavailable"
+            end
+          end
+          class FileTest
+            def self.class_eval(&block)
+              raise NoMethodError, "class_eval is unavailable"
+            end
+          end
         end
       RUBY
 

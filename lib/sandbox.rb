@@ -38,6 +38,9 @@ module Sandbox
         def `(*args)
           raise NoMethodError, "` is unavailable"
         end
+        def system(*args)
+          raise NoMethodError, "system is unavailable"
+        end
       end
     end
     

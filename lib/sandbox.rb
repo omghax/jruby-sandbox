@@ -82,9 +82,6 @@ module Sandbox
             def self.instance_eval 
               raise NoMethodError, "instance_eval is unavailable"
             end
-            def self.eval(*args)
-              raise NoMethodError, "eval is unavailable"
-            end
           end
         end
       RUBY

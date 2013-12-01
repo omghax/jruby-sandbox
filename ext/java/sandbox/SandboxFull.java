@@ -273,7 +273,7 @@ public class SandboxFull extends RubyObject {
 
   protected static IRubyObject getLinkedObject(IRubyObject arg) {
     IRubyObject object = arg.getRuntime().getNil();
-    if (arg.getInstanceVariables().getInstanceVariable("__link__") != null) {
+    if (arg.getInstanceVariables().hasInstanceVariable("__link__")) {
       object = (IRubyObject) arg.getInstanceVariables().getInstanceVariable("__link__");
     }
     return object;
@@ -281,7 +281,7 @@ public class SandboxFull extends RubyObject {
 
   protected static IRubyObject getLinkedBox(IRubyObject arg) {
     IRubyObject object = arg.getRuntime().getNil();
-    if (arg.getInstanceVariables().getInstanceVariable("__box__") != null) {
+    if (arg.getInstanceVariables().hasInstanceVariable("__box__")) {
       object = (IRubyObject) arg.getInstanceVariables().getInstanceVariable("__box__");
     }
     return object;

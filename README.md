@@ -1,9 +1,13 @@
 JRuby Sandbox
 =============
 
-The JRuby sandbox is a reimplementation of _why's freaky freaky sandbox
+The JRuby sandbox is a reimplementation of \_why's freaky freaky sandbox
 in JRuby, and is heavily based on [javasand][1] by Ola Bini, but updated
 for JRuby 1.6.
+
+## Installation
+
+    gem install jruby_sandbox
 
 ## Prerequisites
 
@@ -39,6 +43,8 @@ There's also `Sandbox::Full#require`, which lets you invoke
 core libraries.  Note that this is a direct binding to `Kernel#require`,
 so it will only load ruby stdlib libraries (i.e. no rubygems support
 yet).
+
+Note that all code in the sandbox will be interpreted in Ruby 1.9 mode.
 
 ## Sandbox::Safe usage
 

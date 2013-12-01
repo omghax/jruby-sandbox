@@ -1,5 +1,6 @@
 *.gem
 .bundle
+.ruby-gemset
 lib/sandbox/sandbox.jar
 pkg/*
 tags

@@ -1,4 +1,4 @@
-require 'fakefs/safe'
+require "fakefs/safe"
 
 module Sandbox
   TimeoutError = Class.new(Exception)
@@ -32,7 +32,7 @@ module Sandbox
     end
 
     def activate_fakefs
-      require 'fileutils'
+      require "fileutils"
 
       # unfortunately, the authors of FakeFS used `extend self` in FileUtils, instead of `module_function`.
       # I fixed it for them

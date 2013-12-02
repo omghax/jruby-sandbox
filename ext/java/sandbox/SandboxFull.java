@@ -51,11 +51,9 @@ public class SandboxFull extends RubyObject {
     cfg.setProfile(profile);
 
     wrapped = Ruby.newInstance(cfg);
-
-    RubyClass cBoxedClass = wrapped.defineClass("BoxedClass", wrapped.getObject(), wrapped.getObject().getAllocator());
-    cBoxedClass.defineAnnotatedMethods(BoxedClass.class);
-    
     currentScope = wrapped.getCurrentContext().getCurrentScope();
+
+    BoxedClass.createBoxedClassClass(wrapped);
 
     return this;
   }

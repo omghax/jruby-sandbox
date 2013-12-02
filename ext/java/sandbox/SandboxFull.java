@@ -14,6 +14,7 @@ import org.jruby.anno.JRubyClass;
 import org.jruby.anno.JRubyMethod;
 import org.jruby.internal.runtime.methods.DynamicMethod;
 import org.jruby.runtime.Block;
+import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.common.IRubyWarnings;
 import org.jruby.exceptions.RaiseException;
@@ -22,10 +23,16 @@ import org.jruby.runtime.DynamicScope;
 
 @JRubyClass(name="Sandbox::Full")
 public class SandboxFull extends RubyObject {
+  protected static ObjectAllocator FULL_ALLOCATOR = new ObjectAllocator() {
+    public IRubyObject allocate(Ruby runtime, RubyClass klass) {
+      return new SandboxFull(runtime, klass);
+    }
+  };
+
   private Ruby wrapped;
   private DynamicScope currentScope;
 
-  public SandboxFull(Ruby runtime, RubyClass type) {
+  protected SandboxFull(Ruby runtime, RubyClass type) {
     super(runtime, type);
     reload();
   }

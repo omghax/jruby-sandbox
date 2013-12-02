@@ -28,31 +28,31 @@ describe Sandbox do
         subject.eval('`echo hello`')
       }.to raise_error(Sandbox::SandboxException)
     end
-    
+
     it "should activate FakeFS inside the sandbox (and not allow it to be deactivated)" do
       subject.eval('File').should == ::File
-      
+
       subject.activate!
-      
+
       foo = File.join(File.dirname(__FILE__), 'support', 'foo.txt')
 
       expect {
         subject.eval(%{File.read('#{foo}')})
       }.to raise_error(Sandbox::SandboxException, /Errno::ENOENT: No such file or directory/)
-      
+
       subject.eval('File').should == FakeFS::File
       subject.eval('Dir').should == FakeFS::Dir
       subject.eval('FileUtils').should == FakeFS::FileUtils
       subject.eval('FileTest').should == FakeFS::FileTest
-      
+
       subject.eval(%{FakeFS.deactivate!})
-      
+
       expect {
         subject.eval(%{File.read('#{foo}')})
       }.to raise_error(Sandbox::SandboxException, /Errno::ENOENT: No such file or directory/)
-      
+
       subject.eval(%{File.open('/bar.txt', 'w') {|file| file << "bar" }})
-      
+
       expect {
         subject.eval(%{FileUtils.cp('/bar.txt', '/baz.txt')})
       }.to_not raise_error(Sandbox::SandboxException, /NoMethodError/)
@@ -72,10 +72,10 @@ describe Sandbox do
       end
     end
   end
-  
+
   describe "#eval with timeout" do
     subject { Sandbox.safe }
-    
+
     context "before it's been activated" do
       it "should protect against long running code" do
         long_code = <<-RUBY
@@ -86,21 +86,21 @@ describe Sandbox do
           subject.eval(long_code, timeout: 1)
         }.to raise_error(Sandbox::TimeoutError)
       end
-      
+
       it "should not raise a timeout error if the code runs in under the passed in time" do
         short_code = <<-RUBY
           1+1
         RUBY
-        
+
         expect {
           subject.eval(short_code, timeout: 1)
         }.to_not raise_error(Sandbox::TimeoutError)
       end
     end
-    
+
     context "after it's been activated" do
       before(:each) { subject.activate! }
-      
+
       it "should protect against long running code" do
         long_code = <<-RUBY
           while true; end
@@ -110,10 +110,10 @@ describe Sandbox do
           subject.eval(long_code, timeout: 1)
         }.to raise_error(Sandbox::TimeoutError)
       end
-      
+
       it "should persist state between evaluations" do
         subject.eval('o = Object.new', timeout: 1)
-        
+
         expect {
           subject.eval('o', timeout: 1)
         }.to_not raise_error(Sandbox::SandboxException)
@@ -132,10 +132,10 @@ describe Sandbox do
       OPS
       subject.eval(operations).should == 'foo'
     end
-    
+
     it "should have an empty ENV" do
       pending do
-        subject.eval(%{ENV.to_a}).should be_empty 
+        subject.eval(%{ENV.to_a}).should be_empty
       end
     end
 
@@ -186,10 +186,10 @@ describe Sandbox do
       end
     end
   end
-  
+
   describe "#import" do
     subject { Sandbox.new }
-    
+
     it "should be able to call a referenced namespaced module method" do
       Foo = Class.new
       Foo::Bar = Module.new do
@@ -214,14 +214,14 @@ describe Sandbox do
       subject.eval("class Bar; include Foo; end; nil")
       subject.eval('Bar.new.baz').should == 'baz'
     end
-    
+
     it "should be able to copy instance methods from a module that uses module_function" do
-      Foo = Module.new do        
+      Foo = Module.new do
         def baz; 'baz'; end
-        
+
         module_function :baz
       end
-      
+
       subject.import Foo
       subject.eval('Foo.baz').should == 'baz'
     end

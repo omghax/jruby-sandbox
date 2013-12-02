@@ -6,7 +6,7 @@ module Sandbox
   class Safe < Full
     def activate!
       activate_fakefs
-      
+
       keep_singleton_methods(:Kernel, KERNEL_S_METHODS)
       keep_singleton_methods(:Symbol, SYMBOL_S_METHODS)
       keep_singleton_methods(:String, STRING_S_METHODS)
@@ -24,27 +24,28 @@ module Sandbox
         def `(*args)
           raise NoMethodError, "` is unavailable"
         end
+
         def system(*args)
           raise NoMethodError, "system is unavailable"
         end
       end
     end
-    
+
     def activate_fakefs
       require 'fileutils'
-      
+
       # unfortunately, the authors of FakeFS used `extend self` in FileUtils, instead of `module_function`.
       # I fixed it for them
       (FakeFS::FileUtils.methods - Module.methods - Kernel.methods).each do |module_method_name|
         FakeFS::FileUtils.send(:module_function, module_method_name)
       end
-      
+
       import  FakeFS
       ref     FakeFS::Dir
       ref     FakeFS::File
       ref     FakeFS::FileTest
       import  FakeFS::FileUtils #import FileUtils because it is a module
-      
+
       # this is basically what FakeFS.activate! does, but we want to do it in the sandbox
       # so we have to live with this:
       eval <<-RUBY
@@ -53,7 +54,7 @@ module Sandbox
           remove_const(:File)
           remove_const(:FileTest)
           remove_const(:FileUtils)
-      
+
           const_set(:Dir,       FakeFS::Dir)
           const_set(:File,      FakeFS::File)
           const_set(:FileUtils, FakeFS::FileUtils)
@@ -62,21 +63,20 @@ module Sandbox
 
         [Dir, File, FileUtils, FileTest].each do |fake_class|
           fake_class.class_eval do
-            def self.class_eval 
+            def self.class_eval
               raise NoMethodError, "class_eval is unavailable"
             end
-            def self.instance_eval 
+            def self.instance_eval
               raise NoMethodError, "instance_eval is unavailable"
             end
           end
         end
       RUBY
-      
+
       FakeFS::FileSystem.clear
     end
-    
+
     def eval(code, options={})
-      
       if seconds = options[:timeout]
         sandbox_timeout(code, seconds) do
           super code
@@ -84,33 +84,32 @@ module Sandbox
       else
         super code
       end
-      
     end
-    
+
     private
-    
+
     def sandbox_timeout(name, seconds)
       val, exc = nil
-      
+
       thread = Thread.start(name) do
         begin
           val = yield
         rescue Exception => exc
         end
       end
-      
+
       thread.join(seconds)
-    
+
       if thread.alive?
         if thread.respond_to? :kill!
           thread.kill!
         else
           thread.kill
         end
-      
+
         timed_out = true
       end
-    
+
       if timed_out
         raise TimeoutError, "#{self.class} timed out"
       elsif exc
@@ -119,7 +118,7 @@ module Sandbox
         val
       end
     end
-    
+
     IO_S_METHODS = %w[
       new
       foreach

@@ -120,14 +120,14 @@ public class SandboxFull extends RubyObject {
         RubyClass klass = (RubyClass) sup;
         if (wrappedModule == wrapped.getObject()) {
           
-          if (link || runtimeModule instanceof RubyClass){ // if this is a ref and not an import
+          if (link || runtimeModule instanceof RubyClass) { // if this is a ref and not an import
             wrappedModule = wrapped.defineClass(name, klass, klass.getAllocator());
           } else {
             wrappedModule = wrapped.defineModule(name);
           }
           
         } else {
-          if (runtimeModule instanceof RubyClass){
+          if (runtimeModule instanceof RubyClass) {
             wrappedModule = wrappedModule.defineClassUnder(name, klass, klass.getAllocator());
           } else {
             wrappedModule = wrappedModule.defineModuleUnder(name);

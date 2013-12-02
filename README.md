@@ -1,6 +1,8 @@
 JRuby Sandbox
 =============
 
+[![Build Status](https://travis-ci.org/omghax/jruby-sandbox.png?branch=master)](https://travis-ci.org/omghax/jruby-sandbox)
+
 The JRuby sandbox is a reimplementation of _why's freaky freaky sandbox
 in JRuby, and is heavily based on [javasand][1] by Ola Bini, but updated
 for JRuby 1.6.

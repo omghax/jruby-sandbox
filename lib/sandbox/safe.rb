@@ -20,6 +20,10 @@ module Sandbox
       keep_methods(:Enumerable, ENUMERABLE_METHODS)
       keep_methods(:String, STRING_METHODS)
 
+      # FIXME: Blacklisting Object methods is not a scalable solution.
+      # Whitelisting using #keep_methods is safer.
+      remove_method(:Object, :java_import)
+
       Kernel.class_eval do
         def `(*args)
           raise NoMethodError, "` is unavailable"

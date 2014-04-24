@@ -65,6 +65,12 @@ module Sandbox
           const_set(:FileTest,  FakeFS::FileTest)
         end
 
+        class Object
+          def require(*args)
+            true
+          end
+        end
+
         [Dir, File, FileUtils, FileTest].each do |fake_class|
           fake_class.class_eval do
             def self.class_eval
@@ -154,6 +160,7 @@ module Sandbox
       proc
       raise
       scan
+      sleep
       split
       sprintf
       String
@@ -188,6 +195,7 @@ module Sandbox
       eql?
       equal?
       eval
+      extend
       fail
       Float
       format
@@ -198,7 +206,9 @@ module Sandbox
       gsub!
       hash
       id
+      initialize_clone
       initialize_copy
+      initialize_dup
       inspect
       instance_eval
       instance_of?
@@ -231,6 +241,7 @@ module Sandbox
       singleton_method_added
       singleton_method_removed
       singleton_method_undefined
+      sleep
       split
       sprintf
       String
@@ -292,6 +303,8 @@ module Sandbox
       find
       find_all
       grep
+      initialize_dup
+      initialize_clone
       include?
       inject
       map
@@ -299,10 +312,12 @@ module Sandbox
       member?
       min
       partition
+      reduce
       reject
       select
       sort
       sort_by
+      sum
       to_a
       zip
     ].freeze
@@ -315,10 +330,12 @@ module Sandbox
       <=>
       ==
       =~
+      bytesize
       capitalize
       capitalize!
       casecmp
       center
+      chars
       chomp
       chomp!
       chop
@@ -336,6 +353,7 @@ module Sandbox
       each_line
       empty?
       eql?
+      force_encoding
       gsub
       gsub!
       hash

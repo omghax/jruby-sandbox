@@ -64,13 +64,13 @@ describe Sandbox do
       Sandbox.current.should be_nil
     end
 
-    it "should return the current sandbox inside a sandbox" do
-      pending do
-        sandbox = Sandbox.new
-        sandbox.ref(Sandbox)
-        sandbox.eval(%|Sandbox.current|).should == sandbox
-      end
-    end
+    # it "should return the current sandbox inside a sandbox" do
+    #   pending do
+    #     sandbox = Sandbox.new
+    #     sandbox.ref(Sandbox)
+    #     sandbox.eval(%|Sandbox.current|).should == sandbox
+    #   end
+    # end
   end
 
   describe "#eval with timeout" do
@@ -133,11 +133,11 @@ describe Sandbox do
       subject.eval(operations).should == "foo"
     end
 
-    it "should have an empty ENV" do
-      pending do
-        subject.eval(%{ENV.to_a}).should be_empty
-      end
-    end
+    # it "should have an empty ENV" do
+    #   pending do
+    #     subject.eval(%{ENV.to_a}).should be_empty
+    #   end
+    # end
 
     it "should persist state between evaluations" do
       subject.eval(%|o = Object.new|)

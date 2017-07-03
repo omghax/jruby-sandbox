@@ -3,12 +3,12 @@ $:.push File.expand_path("../lib", __FILE__)
 require "sandbox/version"
 
 Gem::Specification.new do |s|
-  s.name        = "jruby_sandbox"
+  s.name        = "xplenty-jruby_sandbox"
   s.version     = Sandbox::VERSION
   s.platform    = "java"
-  s.authors     = ["Dray Lacy", "Eric Allam"]
-  s.email       = ["dray@envylabs.com", "eric@envylabs.com"]
-  s.homepage    = "http://github.com/omghax/jruby-sandbox"
+  s.authors     = ["Dray Lacy", "Eric Allam", "Moty Michaely"]
+  s.email       = ["dray@envylabs.com", "eric@envylabs.com", "moty.mi@gmail.com"]
+  s.homepage    = "http://github.com/xplenty/jruby-sandbox"
   s.summary     = "Sandbox support for JRuby"
   s.description = "A version of _why's Freaky Freaky Sandbox for JRuby."
 

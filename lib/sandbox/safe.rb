@@ -153,6 +153,7 @@ module Sandbox
       gsub!
       Integer
       iterator?
+      JSON
       lambda
       local_variables
       loop
@@ -181,6 +182,7 @@ module Sandbox
       ==
       ===
       =~
+      __send__
       Array
       binding
       block_given?
@@ -212,22 +214,23 @@ module Sandbox
       inspect
       instance_eval
       instance_of?
-      instance_variables
+      instance_variable_defined?
       instance_variable_get
       instance_variable_set
-      instance_variable_defined?
+      instance_variables
       Integer
       is_a?
       iterator?
+      JSON
       kind_of?
       lambda
       local_variables
       loop
-      methods
       method_missing
+      methods
       nil?
-      private_methods
       print
+      private_methods
       proc
       protected_methods
       public_methods
@@ -237,10 +240,10 @@ module Sandbox
       respond_to_missing?
       scan
       send
-      singleton_methods
       singleton_method_added
       singleton_method_removed
       singleton_method_undefined
+      singleton_methods
       sleep
       split
       sprintf
@@ -254,7 +257,6 @@ module Sandbox
       to_s
       type
       untaint
-      __send__
     ].freeze
 
     NILCLASS_METHODS = %w[

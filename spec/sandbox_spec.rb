@@ -1,6 +1,7 @@
 require "rspec"
 require "sandbox"
 require "timeout"
+require "json"
 
 describe Sandbox do
   after(:each) do
@@ -126,6 +127,9 @@ describe Sandbox do
 
     it "should allow a range of common operations" do
       operations = <<-OPS
+        require 'json'
+        JSON({})
+        JSON({ :a => :b })
         1 + 1
         "foo".chomp
         "foo"

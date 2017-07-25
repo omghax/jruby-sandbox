@@ -65,9 +65,7 @@ describe Sandbox do
 
       subject.activate!
 
-      expect{ 
-        subject.eval(%{ENV.to_a})
-      }.to raise_error(Sandbox::SandboxException, /NameError: uninitialized constant ENV/)
+      subject.eval(%{ENV.to_a}).should be_empty
     end
   end
 

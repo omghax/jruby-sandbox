@@ -71,6 +71,11 @@ module Sandbox
           end
         end
 
+        # We do this here as some of the FakeFs classes require ENV in order to behave..
+        Object.class_eval do
+          remove_const(:ENV)
+        end
+
         [Dir, File, FileUtils, FileTest].each do |fake_class|
           fake_class.class_eval do
             def self.class_eval

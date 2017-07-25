@@ -58,6 +58,17 @@ describe Sandbox do
         subject.eval(%{FileUtils.cp("/bar.txt", "/baz.txt")})
       }.to_not raise_error(Sandbox::SandboxException, /NoMethodError/)
     end
+
+
+    it "should have an empty ENV" do
+      subject.eval(%{ENV.to_a}).should_not be_empty
+
+      subject.activate!
+
+      expect{ 
+        subject.eval(%{ENV.to_a})
+      }.to raise_error(Sandbox::SandboxException, /NameError: uninitialized constant ENV/)
+    end
   end
 
   describe ".current" do
@@ -136,12 +147,6 @@ describe Sandbox do
       OPS
       subject.eval(operations).should == "foo"
     end
-
-    # it "should have an empty ENV" do
-    #   pending do
-    #     subject.eval(%{ENV.to_a}).should be_empty
-    #   end
-    # end
 
     it "should persist state between evaluations" do
       subject.eval(%|o = Object.new|)

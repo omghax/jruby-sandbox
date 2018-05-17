@@ -65,6 +65,19 @@ module Sandbox
           const_set(:FileTest,  FakeFS::FileTest)
         end
 
+        class Object
+          def require(*args)
+            true
+          end
+        end
+
+        # We do this here as some of the FakeFs classes require ENV in order to behave..
+        Object.class_eval do
+          remove_const(:ENV)
+
+          const_set(:ENV, {})
+        end
+
         [Dir, File, FileUtils, FileTest].each do |fake_class|
           fake_class.class_eval do
             def self.class_eval
@@ -147,6 +160,7 @@ module Sandbox
       gsub!
       Integer
       iterator?
+      JSON
       lambda
       local_variables
       loop
@@ -154,6 +168,7 @@ module Sandbox
       proc
       raise
       scan
+      sleep
       split
       sprintf
       String
@@ -174,6 +189,7 @@ module Sandbox
       ==
       ===
       =~
+      __send__
       Array
       binding
       block_given?
@@ -188,6 +204,7 @@ module Sandbox
       eql?
       equal?
       eval
+      extend
       fail
       Float
       format
@@ -198,26 +215,29 @@ module Sandbox
       gsub!
       hash
       id
+      initialize_clone
       initialize_copy
+      initialize_dup
       inspect
       instance_eval
       instance_of?
-      instance_variables
+      instance_variable_defined?
       instance_variable_get
       instance_variable_set
-      instance_variable_defined?
+      instance_variables
       Integer
       is_a?
       iterator?
+      JSON
       kind_of?
       lambda
       local_variables
       loop
-      methods
       method_missing
+      methods
       nil?
-      private_methods
       print
+      private_methods
       proc
       protected_methods
       public_methods
@@ -227,10 +247,11 @@ module Sandbox
       respond_to_missing?
       scan
       send
-      singleton_methods
       singleton_method_added
       singleton_method_removed
       singleton_method_undefined
+      singleton_methods
+      sleep
       split
       sprintf
       String
@@ -243,7 +264,6 @@ module Sandbox
       to_s
       type
       untaint
-      __send__
     ].freeze
 
     NILCLASS_METHODS = %w[
@@ -292,6 +312,8 @@ module Sandbox
       find
       find_all
       grep
+      initialize_dup
+      initialize_clone
       include?
       inject
       map
@@ -299,10 +321,12 @@ module Sandbox
       member?
       min
       partition
+      reduce
       reject
       select
       sort
       sort_by
+      sum
       to_a
       zip
     ].freeze
@@ -315,10 +339,12 @@ module Sandbox
       <=>
       ==
       =~
+      bytesize
       capitalize
       capitalize!
       casecmp
       center
+      chars
       chomp
       chomp!
       chop
@@ -336,6 +362,7 @@ module Sandbox
       each_line
       empty?
       eql?
+      force_encoding
       gsub
       gsub!
       hash

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "fakefs"
+  s.add_dependency "fakefs", "~> 0.13.3"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rake-compiler"
